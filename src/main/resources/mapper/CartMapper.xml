@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.newdx.baili.dao.CartMapper">
+  <resultMap id="BaseResultMap" type="com.newdx.baili.entity.Cart">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="gid" jdbcType="INTEGER" property="gid" />
+    <result column="num" jdbcType="INTEGER" property="num" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="size" property="size" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, gid, num, uid, pid, size
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_cart
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByUid" parameterType="java.lang.Integer" resultType="com.newdx.baili.vo.VCart">
+    select c.*, g.goodsname,g.price,u.username,p.picture from t_cart c
+    INNER JOIN t_goods g
+    on c.gid=g.id
+    INNER JOIN t_user u
+    on c.uid=u.id
+    INNER JOIN t_picture p
+    on c.pid=p.id
+    where uid = #{uid,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_cart
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.newdx.baili.entity.Cart">
+    insert into t_cart (id, gid, num, 
+      uid, pid, size)
+    values (#{id,jdbcType=INTEGER}, #{gid,jdbcType=INTEGER}, #{num,jdbcType=INTEGER}, 
+      #{uid,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, #{size,jdbcType=INTEGER})
+  </insert>
+
+</mapper>
